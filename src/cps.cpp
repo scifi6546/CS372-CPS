@@ -228,13 +228,11 @@ double Horizontal::get_height() const {
     }
     return largest;
 }
-
-void Horizontal::createPostScript(std::ostream &os) const {
-    for (int i = 1; i <= _shapes.size(); ++i) {
-        os << "gsave " << _shapes[i - 1]->get_width() * i << " 0 translate " << gotoCenter() << " ";
-        _shapes[i - 1]->createPostScript(os);
-        os << " grestore ";
-    }
+std::vector<std::shared_ptr<Shape>> Horizontal::getShapes() const{
+    return _shapes;
+}
+void Horizontal::moveTo(std::ostream &os,int index)const{
+    os << "gsave " << _shapes[index]->get_width() * index << " 0 translate " << gotoCenter() << " ";
 }
 
 Star::Star(double sideLength): sideLength(sideLength) {
@@ -282,12 +280,6 @@ std::shared_ptr<Shape> getSpacer(double width, double height) {
 
 std::shared_ptr<Shape> getPolygon(double sideLength, double numberOfSides) {
     return std::make_shared<Polygon>(numberOfSides, sideLength);
-}
-
-void getPostScriptPage(std::ostream &os, std::shared_ptr<Shape> shape) {
-    os << "newpath " << gotoCenter() << " ";
-    shape->createPostScript(os);
-    os << "showpage";
 }
 
 std::shared_ptr<Shape> getRotated(std::shared_ptr<Shape> shape, int rotationAngle) {

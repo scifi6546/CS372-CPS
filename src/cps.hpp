@@ -194,7 +194,7 @@ private:
 };
 
 
-class Horizontal : public Shape {
+class Horizontal : public Container {
 public:
     Horizontal(std::initializer_list<std::shared_ptr<Shape>> shapes);
 
@@ -202,7 +202,9 @@ public:
 
     double get_height() const override;
 
-    void createPostScript(std::ostream &os) const override;
+    std::vector<std::shared_ptr<Shape>> getShapes() const override;
+
+    void moveTo(std::ostream &os,int index) const override;
 
 private:
     std::vector<std::shared_ptr<Shape>> _shapes;
