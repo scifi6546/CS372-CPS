@@ -155,9 +155,10 @@ void Scaled::createPostScript(std::ostream &os) const {
     os << "grestore ";
 }
 void Container::createPostScript(std::ostream &os) const{
-    for(auto shape : getShapes()){
-        moveTo(os);
-        shape->createPostScript(os);
+    auto shapes = getShapes();
+    for(int i =0;i<shapes.size();++i){
+        moveTo(os,i);
+        shapes[i]->createPostScript(os);
 
     }
 }
@@ -171,7 +172,7 @@ double Layered::get_height() const {
 std::vector<std::shared_ptr<Shape>> Layered::getShapes() const{
     return shapes;
 }
-void Layered::moveTo(std::ostream &os)const{
+void Layered::moveTo(std::ostream &os,int index)const{
 
 }
 Layered::Layered(std::initializer_list<std::shared_ptr<Shape>> shapes) : shapes(shapes) {
@@ -199,13 +200,11 @@ double Vertical::get_height() const {
     }
     return height;
 }
-
-void Vertical::createPostScript(std::ostream &os) const {
-    for (int i = 1; i <= _shapes.size(); ++i) {
-        os << "gsave 0 " << _shapes[i - 1]->get_height() * i << " translate " << gotoCenter() << " ";
-        _shapes[i - 1]->createPostScript(os);
-        os << " grestore ";
-    }
+std::vector<std::shared_ptr<Shape>>  Vertical::getShapes()const{
+    return _shapes;
+}
+void Vertical::moveTo(std::ostream &os,int index) const{
+    os << "gsave 0 " << _shapes[index]->get_height() * index << " translate " << gotoCenter() << " ";
 }
 
 Horizontal::Horizontal(std::initializer_list<std::shared_ptr<Shape>> shapes) {
