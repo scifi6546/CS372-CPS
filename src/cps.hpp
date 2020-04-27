@@ -148,7 +148,14 @@ private:
     double x;
     double y;
 };
+class Container : public Shape{
+    public:
+    Container(std::initializer_list<std::shared_ptr<Shape>> shapes);
 
+    virtual void moveTo(std::ostream &os) = 0;
+
+    void createPostScript(std::ostream &os) const override;
+};
 
 class Layered : public Shape {
 public:
