@@ -150,14 +150,15 @@ private:
 };
 class Container : public Shape{
     public:
-    Container(std::initializer_list<std::shared_ptr<Shape>> shapes);
+    //Container(std::initializer_list<std::shared_ptr<Shape>> shapes);
 
-    virtual void moveTo(std::ostream &os) = 0;
-
+    virtual void moveTo(std::ostream &os) const = 0;
+    virtual std::vector<std::shared_ptr<Shape>> getShapes() const = 0;
     void createPostScript(std::ostream &os) const override;
+    private:
 };
 
-class Layered : public Shape {
+class Layered : public Container{
 public:
     Layered(std::initializer_list<std::shared_ptr<Shape>> shapes);
 
@@ -165,7 +166,9 @@ public:
 
     double get_height() const override;
 
-    void createPostScript(std::ostream &os) const override;
+    std::vector<std::shared_ptr<Shape>> getShapes() const override;  
+
+    void moveTo(std::ostream &os) const override;
 
 private:
     std::vector<std::shared_ptr<Shape>> shapes;

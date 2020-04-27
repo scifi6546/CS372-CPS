@@ -154,7 +154,13 @@ void Scaled::createPostScript(std::ostream &os) const {
     shape->createPostScript(os);
     os << "grestore ";
 }
+void Container::createPostScript(std::ostream &os) const{
+    for(auto shape : getShapes()){
+        moveTo(os);
+        shape->createPostScript(os);
 
+    }
+}
 double Layered::get_width() const {
     return 0;
 }
@@ -162,13 +168,12 @@ double Layered::get_width() const {
 double Layered::get_height() const {
     return 0;
 }
-
-void Layered::createPostScript(std::ostream &os) const {
-    for (auto s : shapes) {
-        s->createPostScript(os);
-    }
+std::vector<std::shared_ptr<Shape>> Layered::getShapes() const{
+    return shapes;
 }
+void Layered::moveTo(std::ostream &os)const{
 
+}
 Layered::Layered(std::initializer_list<std::shared_ptr<Shape>> shapes) : shapes(shapes) {
 
 }
